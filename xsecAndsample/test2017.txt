@@ -1,0 +1,26 @@
+DYJetsToLL_M-10to50 total: 95894507 positive: 83906895 negatvie: 11987612 pos_neg 71919283
+DYJetsToLL_M-10to50-madgraphMLM total: 68480179 positive: 68480179 negatvie: 0 pos_neg 68480179
+DYJetsToLL_M-50 total: 196329377 positive: 164209627 negatvie: 32119750 pos_neg 132089877
+DYJetsToLL_M-50madgraphMLM total: 103344974 positive: 103344974 negatvie: 0 pos_neg 103344974
+ST_s-channel_4f_leptonDecays total: 13882000 positive: 11459644 negatvie: 2422356 pos_neg 9037288
+ST_t-channel_antitop_4f_InclusiveDecays total: 69921000 positive: 67871361 negatvie: 2049639 pos_neg 65821722
+ST_t-channel_top_4f_InclusiveDecays total: 129903000 positive: 125815626 negatvie: 4087374 pos_neg 121728252
+ST_tW_antitop_5f_DS_NoFullyHadronicDecays total: 3382885 positive: 3364998 negatvie: 17887 pos_neg 3347111
+ST_tW_antitop_5f_NoFullyHadronicDecays total: 8433998 positive: 8433780 negatvie: 218 pos_neg 8433562
+ST_tW_top_5f_DS_NoFullyHadronicDecays total: 3276761 positive: 3258352 negatvie: 18409 pos_neg 3239943
+ST_tW_top_5f_NoFullyHadronicDecays total: 8507203 positive: 8506984 negatvie: 219 pos_neg 8506765
+TTJets_Inclusive total: 249133364 positive: 169756186 negatvie: 79377178 pos_neg 90379008
+TTbar_Signal total: 106724000 positive: 106291995 negatvie: 432005 pos_neg 105859990
+TTbar_AllHadronic total: 235719999 positive: 234767708 negatvie: 952291 pos_neg 233815417
+TTbar_SemiLeptonic total: 355332000 positive: 353897316 negatvie: 1434684 pos_neg 352462632
+TTWJetsToLNu total: 7460671 positive: 5752770 negatvie: 1707901 pos_neg 4044869
+TTWJetsToQQ total: 655018 positive: 507012 negatvie: 148006 pos_neg 359006
+TTZToLLNuNu_M-10 total: 14196000 positive: 10593267 negatvie: 3602733 pos_neg 6990534
+TTZToQQ total: 13982000 positive: 10464005 negatvie: 3517995 pos_neg 6946010
+WJetsToLNu total: 26838734 positive: 22626512 negatvie: 4212222 pos_neg 18414290
+Invalid directory path: NtupleCheck_v1/UL2017/WJetsToLNu-madgraphMLM
+WW total: 15634000 positive: 15634000 negatvie: 0 pos_neg 15634000
+WZ total: 7889000 positive: 7889000 negatvie: 0 pos_neg 7889000
+ZZ total: 2706000 positive: 2706000 negatvie: 0 pos_neg 2706000
+
+

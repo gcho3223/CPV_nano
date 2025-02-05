@@ -1,0 +1,31 @@
+
+#ifndef ANALYSIS_H
+#define ANALYSIS_H
+
+#include <TTree.h>
+#include <map>
+#include <string>
+
+class Analysis {
+public:
+    // 생성자 및 소멸자
+    Analysis(TTree *tree, const std::string &branchListFile);
+    ~Analysis() = default;
+
+    // 이벤트 루프 함수
+    void Loop();
+
+private:
+    // 트리 포인터
+    TTree *tree;
+
+    // 여러 브랜치를 저장할 map
+    std::map<std::string, Bool_t> boolBranches;
+    std::map<std::string, Float_t> floatBranches;
+
+    // 브랜치 설정 함수
+    void SetBranchAddresses();
+    void LoadBranchList(const std::string &branchListFile); // 브랜치 리스트 로드 함수
+};
+
+#endif // ANALYSIS_H

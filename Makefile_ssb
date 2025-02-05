@@ -1,0 +1,48 @@
+PROGRAM         = ssb_analysis 
+#PROGRAM         = pfCalib_analysis 
+CC              = g++
+LD              = g++
+CXXFLAGS        = -g -O2 -I$(ROOTSYS)/include -std=c++17 
+LDFLAGS         = $(LIBS) $(GLIBS) -B/usr/X11R6/lib -B/usr/lib64 
+OPT             =
+ROOTLIBS        = $(shell root-config --libs)
+ROOTGLIBS       = $(shell root-config --glibs)
+
+
+LIBS            = $(ROOTLIBS)
+GLIBS           = $(ROOTGLIBS) -L/usr/X11R6/lib -lXext -lGenVector
+OBJS            = CommonTools.o  Analysis.o main_ssb.o TextReader.o  
+INPUTS	   	    =  ./interface/Analysis.h ./src/Analysis.cpp main_ssb.cpp ./TextReader/TextReader.hpp ./TextReader/TextReader.cpp
+ 
+all: $(OBJS) 															
+	$(CC) $(OPT) $(LDFLAGS) -o $(PROGRAM) -g $(OBJS) $(LIBS)
+
+main_ssb.o: main_ssb.cpp $(INPUTS) 
+	$(CC) $(CXXFLAGS) -c main_ssb.cpp
+
+#ssb_analysis.o: ./interface/ssb_analysis.hpp ./src/ssb_analysis.cpp
+#	$(CC) $(CXXFLAGS) -c ./src/ssb_analysis.cpp
+
+Analysis.o: ./interface/Analysis.h ./src/Analysis.cpp
+	$(CC) $(CXXFLAGS) -c ./src/Analysis.cpp
+
+CommonTools.o: CommonTools.hpp CommonTools.cpp
+	$(CC) $(CXXFLAGS) -c CommonTools.cpp
+
+TextReader.o: ./TextReader/TextReader.hpp ./TextReader/TextReader.cpp
+	$(CC) $(CXXFLAGS) -c TextReader/TextReader.cpp
+
+clean:
+	-rm -f *~ $(OBJS) core core.*	
+	-rm -rf ti_files
+	-rm -f $(PROGRAM)
+	-rm -f *~;
+
+distclean:						
+	-rm -f *~ $(PROGRAM) $(OBJS)
+	-rm -rf ti_files
+
+run: $(PROGRAM) $(OBJS)	
+	make all
+	./$(PROGRAM) 1
+

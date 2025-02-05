@@ -1,0 +1,118 @@
+#include "../interface/Analysis.h"
+#include <fstream>
+#include <iostream>
+#include <sstream>
+
+// Constructor: initialize chain and load branch list
+Analysis::Analysis(TChain *inputChain, const std::string &branchListFile) : chain(inputChain) {
+    if (!chain) {
+        std::cerr << "Error: Invalid TChain pointer!" << std::endl;
+        return;
+    }
+
+    // Load branch list from the text file
+    LoadBranchList(branchListFile);
+
+    // Call function to set branch addresses
+    SetBranchAddresses();
+}
+
+// Function to load branch list from a text file
+void Analysis::LoadBranchList(const std::string &branchListFile) {
+    std::ifstream infile(branchListFile);
+    if (!infile) {
+        std::cerr << "Error: Could not open branch list file " << branchListFile << std::endl;
+        return;
+    }
+
+    std::string line;
+    while (std::getline(infile, line)) {
+        std::istringstream iss(line);
+        std::string branchName, objectType, dataType, extraInfo;
+        
+        // Parse line by comma to get branch name, object type, data type, and extra info (if available)
+        if (std::getline(iss, branchName, ',') && std::getline(iss, objectType, ',') && std::getline(iss, dataType, ',')) {
+            branchName.erase(branchName.find_last_not_of(" \t\n\r") + 1); // Trim whitespace
+            objectType.erase(0, objectType.find_first_not_of(" \t\n\r")); // Trim whitespace
+            dataType.erase(0, dataType.find_first_not_of(" \t\n\r"));     // Trim whitespace
+
+            // Check for optional extra info (e.g., "ID" or "Isolation")
+            if (std::getline(iss, extraInfo, ',')) {
+                extraInfo.erase(0, extraInfo.find_first_not_of(" \t\n\r")); // Trim whitespace
+            }
+
+            // Add to appropriate map based on data type and extra info
+            if (dataType == "Bool_t") {
+                boolBranches[branchName] = false;
+            } else if (dataType == "Float_t") {
+                if (extraInfo == "Isolation") {
+                    floatIsolationBranches[branchName] = 0.0; // Isolation as Float_t
+                } else {
+                    floatBranches[branchName] = 0.0;
+                }
+            } else if (dataType == "Int_t" && extraInfo == "ID") {
+                intBranches[branchName] = 0; // Store IDs in intBranches
+            } else if (dataType == "Float_t[]") {
+                vectorBranches[branchName] = new std::vector<float>(); // Store arrays as vectors
+            } else {
+                std::cerr << "Error: Unsupported data type or format " << dataType << std::endl;
+            }
+        } else {
+            std::cerr << "Error: Invalid branch format in list" << std::endl;
+        }
+    }
+}
+
+// Function to set branch addresses
+void Analysis::SetBranchAddresses() {
+    for (auto &branch : boolBranches) {
+        chain->SetBranchAddress(branch.first.c_str(), &branch.second);
+    }
+    for (auto &branch : floatBranches) {
+        chain->SetBranchAddress(branch.first.c_str(), &branch.second);
+    }
+    for (auto &branch : intBranches) {
+        chain->SetBranchAddress(branch.first.c_str(), &branch.second);
+    }
+    for (auto &branch : floatIsolationBranches) {
+        chain->SetBranchAddress(branch.first.c_str(), &branch.second);
+    }
+    for (auto &branch : vectorBranches) {
+        chain->SetBranchAddress(branch.first.c_str(), &branch.second);
+    }
+}
+
+// Event loop
+void Analysis::Loop() {
+    if (!chain) {
+        std::cerr << "Error: TChain is null!" << std::endl;
+        return;
+    }
+
+    Long64_t nEntries = chain->GetEntries();
+    for (Long64_t i = 0; i < nEntries; ++i) {
+        chain->GetEntry(i);
+
+        // Example analysis code
+        if (boolBranches["HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ"]) {
+            std::cout << "Event " << i << ": HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ Trigger passed!" << std::endl;
+        }
+
+        if (boolBranches["HLT_IsoMu24"]) {
+            std::cout << "Event " << i << ": HLT_IsoMu24 Trigger passed!" << std::endl;
+        }
+
+        std::cout << "Muon pt values: ";
+        std::cout << "Muon size: " << vectorBranches["Muon_pt"]->size()<< std::endl;
+        for (const auto &pt : *vectorBranches["Muon_pt"]) {
+            std::cout << pt << " ";
+        }
+        std::cout << std::endl;
+
+        std::cout << "Muon ID: " << intBranches["Muon_ID"] << std::endl;
+        std::cout << "Muon Isolation: " << floatIsolationBranches["Muon_Isolation"] << std::endl;
+        std::cout << "Electron ID: " << intBranches["Electron_ID"] << std::endl;
+        std::cout << "Electron Isolation: " << floatIsolationBranches["Electron_Isolation"] << std::endl;
+    }
+}
+

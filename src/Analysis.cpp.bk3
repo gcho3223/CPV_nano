@@ -1,0 +1,158 @@
+#include "../interface/Analysis.h"
+#include <fstream>
+#include <iostream>
+#include <sstream>
+
+// Constructor: initialize chain and load branch list
+Analysis::Analysis(TChain *inputChain, const std::string &branchListFile) : chain(inputChain) {
+    if (!chain) {
+        std::cerr << "Error: Invalid TChain pointer!" << std::endl;
+        return;
+    }
+
+    // Load branch list from the text file
+    LoadBranchList(branchListFile);
+
+    // Call function to set branch addresses
+    SetBranchAddresses();
+}
+
+// Function to load branch list from a text file
+void Analysis::LoadBranchList(const std::string &branchListFile) {
+    std::ifstream infile(branchListFile);
+    if (!infile) {
+        std::cerr << "Error: Could not open branch list file " << branchListFile << std::endl;
+        return;
+    }
+
+    std::string line;
+    while (std::getline(infile, line)) {
+        std::istringstream iss(line);
+        std::string branchName, objectType, dataType, varType;
+        
+        // Parse line by comma to get branch name, object type, data type, and variable type (vector/single)
+        if (std::getline(iss, branchName, ',') && std::getline(iss, objectType, ',') && 
+            std::getline(iss, dataType, ',') && std::getline(iss, varType, ',')) {
+            branchName.erase(branchName.find_last_not_of(" \t\n\r") + 1); // Trim whitespace
+            objectType.erase(0, objectType.find_first_not_of(" \t\n\r")); // Trim whitespace
+            dataType.erase(0, dataType.find_first_not_of(" \t\n\r"));     // Trim whitespace
+            varType.erase(0, varType.find_first_not_of(" \t\n\r"));       // Trim whitespace
+
+            // Add to appropriate map based on data type and variable type
+            if (dataType == "Bool_t" && varType == "vector") {
+                vectorBoolBranches[branchName] = new std::vector<bool>();
+            } else if (dataType == "Float_t" && varType == "vector") {
+                vectorFloatBranches[branchName] = new std::vector<float>();
+            } else if (dataType == "Int_t" && varType == "vector") {
+                vectorIntBranches[branchName] = new std::vector<int>();
+            } else if (dataType == "UInt_t" && varType == "single") {
+                uintBranches[branchName] = 0;
+            } else if (dataType == "Bool_t" && varType == "single") {
+                boolBranches[branchName] = false;
+            } else if (dataType == "Float_t" && varType == "single") {
+                floatBranches[branchName] = 0.0;
+            } else {
+                std::cerr << "Error: Unsupported data type or format in branch list: " << dataType << " or " << varType << " branchName : " << branchName << std::endl;
+            }
+        } else {
+            std::cerr << "Error: Invalid branch format in list: " << line << std::endl;
+        }
+    }
+}
+
+// Function to set branch addresses
+void Analysis::SetBranchAddresses() {
+    chain->SetBranchStatus("*", 1); // Ensure all branches are active
+
+    for (auto &branch : boolBranches) {
+        if (chain->SetBranchAddress(branch.first.c_str(), &branch.second) == 0) {
+            std::cout << "Successfully set branch address for " << branch.first << std::endl;
+        } else {
+            std::cerr << "Warning: Branch not found -> " << branch.first << std::endl;
+        }
+    }
+    for (auto &branch : floatBranches) {
+        if (chain->SetBranchAddress(branch.first.c_str(), &branch.second) == 0) {
+            std::cout << "Successfully set branch address for " << branch.first << std::endl;
+        } else {
+            std::cerr << "Warning: Branch not found -> " << branch.first << std::endl;
+        }
+    }
+    for (auto &branch : uintBranches) {
+        if (chain->SetBranchAddress(branch.first.c_str(), &branch.second) == 0) {
+            std::cout << "Successfully set branch address for " << branch.first << std::endl;
+        } else {
+            std::cerr << "Warning: Branch not found -> " << branch.first << std::endl;
+        }
+    }
+
+    // Set branch addresses for vector branches
+    for (auto &branch : vectorFloatBranches) {
+        if (chain->SetBranchAddress(branch.first.c_str(), &branch.second) == 0) {
+            std::cout << "Successfully set branch address for " << branch.first << std::endl;
+        } else {
+            std::cerr << "Warning: " << branch.first << " branch not found!" << std::endl;
+        }
+    }
+    for (auto &branch : vectorIntBranches) {
+        if (chain->SetBranchAddress(branch.first.c_str(), &branch.second) == 0) {
+            std::cout << "Successfully set branch address for " << branch.first << std::endl;
+        } else {
+            std::cerr << "Warning: " << branch.first << " branch not found!" << std::endl;
+        }
+    }
+    for (auto &branch : vectorBoolBranches) {
+        if (chain->SetBranchAddress(branch.first.c_str(), &branch.second) == 0) {
+            std::cout << "Successfully set branch address for " << branch.first << std::endl;
+        } else {
+            std::cerr << "Warning: " << branch.first << " branch not found!" << std::endl;
+        }
+    }
+}
+
+// Event loop
+void Analysis::Loop() {
+    if (!chain) {
+        std::cerr << "Error: TChain is null!" << std::endl;
+        return;
+    }
+
+    Long64_t nEntries = chain->GetEntries();
+    for (Long64_t i = 0; i < nEntries; ++i) {
+        chain->GetEntry(i);
+
+        std::cout << "Event " << i << ": Number of muons = " << nMuon << std::endl;
+        if (vectorFloatBranches["Muon_pt"] && !vectorFloatBranches["Muon_pt"]->empty()) {
+            std::cout << "Muon_pt values: ";
+            for (const auto &pt : *vectorFloatBranches["Muon_pt"]) {
+                std::cout << pt << " ";
+            }
+            std::cout << std::endl;
+        } else {
+            std::cout << "No muons in this event." << std::endl;
+        }
+
+        for (auto &branch : vectorFloatBranches) {
+            std::cout << branch.first << " values: ";
+            for (const auto &val : *branch.second) {
+                std::cout << val << " ";
+            }
+            std::cout << std::endl;
+        }
+        for (auto &branch : vectorIntBranches) {
+            std::cout << branch.first << " values: ";
+            for (const auto &val : *branch.second) {
+                std::cout << val << " ";
+            }
+            std::cout << std::endl;
+        }
+        for (auto &branch : vectorBoolBranches) {
+            std::cout << branch.first << " values: ";
+            for (const auto &val : *branch.second) {
+                std::cout << val << " ";
+            }
+            std::cout << std::endl;
+        }
+    }
+}
+

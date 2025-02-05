@@ -1,0 +1,39 @@
+DYJetsToLL_M-50 total: 196626007 positive: 164474005 negatvie: 32152002 pos_neg 132322003
+DYJetsToLL_M-50_madgraphMLMext1-v1 total: 101415750 positive: 101415750 negatvie: 0 pos_neg 101415750
+DYJetsToLL_M-50_madgraphMLMv2 total: 96233328 positive: 96233328 negatvie: 0 pos_neg 96233328
+ST_s-channel_4f_leptonDecays total: 19365999 positive: 15986870 negatvie: 3379129 pos_neg 12607741
+ST_t-channel_antitop_4f_InclusiveDecays total: 95833000 positive: 93024753 negatvie: 2808247 pos_neg 90216506
+ST_t-channel_top_4f_InclusiveDecays total: 0 positive: 0 negatvie: 0 pos_neg 0
+ST_tW_antitop_5f_DS_NoFullyHadronicDecays total: 4703886 positive: 4678862 negatvie: 25024 pos_neg 4653838
+ST_tW_antitop_5f_NoFullyHadronicDecays total: 10941823 positive: 10941554 negatvie: 269 pos_neg 10941285
+ST_tW_top_5f_DS_NoFullyHadronicDecays total: 4810748 positive: 4783485 negatvie: 27263 pos_neg 4756222
+ST_tW_top_5f_NoFullyHadronicDecays total: 11270430 positive: 11270133 negatvie: 297 pos_neg 11269836
+TTJets_TuneCP5_13TeV-amcatnloFXFX-pythia8 total: 0 positive: 0 negatvie: 0 pos_neg 0
+TTWJetsToLNu total: 10516349 positive: 8109532 negatvie: 2406817 pos_neg 5702715
+TTWJetsToQQ total: 970179 positive: 750253 negatvie: 219926 pos_neg 530327
+TTZToLLNuNu_M-10 total: 19608000 positive: 14629917 negatvie: 4978083 pos_neg 9651834
+TTZToQQ total: 19816000 positive: 14835110 negatvie: 4980890 pos_neg 9854220
+NoFile!!! : NtupleCheck_v1/UL2018/TTbar_AllHadronic/TTbar_AllHadronic_212.txt
+NoFile!!! : NtupleCheck_v1/UL2018/TTbar_AllHadronic/TTbar_AllHadronic_220.txt
+NoFile!!! : NtupleCheck_v1/UL2018/TTbar_AllHadronic/TTbar_AllHadronic_231.txt
+NoFile!!! : NtupleCheck_v1/UL2018/TTbar_AllHadronic/TTbar_AllHadronic_234.txt
+NoFile!!! : NtupleCheck_v1/UL2018/TTbar_AllHadronic/TTbar_AllHadronic_242.txt
+NoFile!!! : NtupleCheck_v1/UL2018/TTbar_AllHadronic/TTbar_AllHadronic_246.txt
+NoFile!!! : NtupleCheck_v1/UL2018/TTbar_AllHadronic/TTbar_AllHadronic_247.txt
+NoFile!!! : NtupleCheck_v1/UL2018/TTbar_AllHadronic/TTbar_AllHadronic_250.txt
+NoFile!!! : NtupleCheck_v1/UL2018/TTbar_AllHadronic/TTbar_AllHadronic_252.txt
+NoFile!!! : NtupleCheck_v1/UL2018/TTbar_AllHadronic/TTbar_AllHadronic_258.txt
+NoFile!!! : NtupleCheck_v1/UL2018/TTbar_AllHadronic/TTbar_AllHadronic_261.txt
+NoFile!!! : NtupleCheck_v1/UL2018/TTbar_AllHadronic/TTbar_AllHadronic_264.txt
+NoFile!!! : NtupleCheck_v1/UL2018/TTbar_AllHadronic/TTbar_AllHadronic_272.txt
+NoFile!!! : NtupleCheck_v1/UL2018/TTbar_AllHadronic/TTbar_AllHadronic_275.txt
+NoFile!!! : NtupleCheck_v1/UL2018/TTbar_AllHadronic/TTbar_AllHadronic_276.txt
+NoFile!!! : NtupleCheck_v1/UL2018/TTbar_AllHadronic/TTbar_AllHadronic_277.txt
+TTbar_AllHadronic total: 266276000 positive: 265199459 negatvie: 1076541 pos_neg 264122918
+TTbar_SemiLeptonic total: 478482000 positive: 476548524 negatvie: 1933476 pos_neg 474615048
+TTbar_Signal total: 146010000 positive: 145420504 negatvie: 589496 pos_neg 144831008
+WJetsToLNu_TuneCP5_13TeV-amcatnloFXFX total: 29117828 positive: 24546398 negatvie: 4571430 pos_neg 19974968
+WJetsToLNu_TuneCP5_13TeV-madgraphMLM total: 82418277 positive: 82418277 negatvie: 0 pos_neg 82418277
+WW total: 15679000 positive: 15679000 negatvie: 0 pos_neg 15679000
+WZ total: 7940000 positive: 7940000 negatvie: 0 pos_neg 7940000
+ZZ total: 3526000 positive: 3526000 negatvie: 0 pos_neg 3526000

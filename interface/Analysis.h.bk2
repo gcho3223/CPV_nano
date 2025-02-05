@@ -1,0 +1,35 @@
+#ifndef ANALYSIS_H
+#define ANALYSIS_H
+
+#include <TChain.h>
+#include <map>
+#include <vector>
+#include <string>
+
+class Analysis {
+public:
+    // Constructor and destructor
+    Analysis(TChain *chain, const std::string &branchListFile);
+    ~Analysis() = default;
+
+    // Event loop function
+    void Loop();
+
+private:
+    // TChain pointer
+    TChain *chain;
+
+    // Maps to store branches
+    std::map<std::string, Bool_t> boolBranches;
+    std::map<std::string, Float_t> floatBranches;
+    std::map<std::string, Int_t> intBranches; // Map for ID branches
+    std::map<std::string, Float_t> floatIsolationBranches; // Map for Isolation branches
+    std::map<std::string, std::vector<float>*> vectorBranches; // Map for array branches
+
+    // Branch setup functions
+    void SetBranchAddresses();
+    void LoadBranchList(const std::string &branchListFile); // Function to load branch list
+};
+
+#endif // ANALYSIS_H
+

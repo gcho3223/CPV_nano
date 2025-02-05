@@ -1,0 +1,30 @@
+DYJetsToLL_M-10to50-madgraphMLM total: 23706672 positive: 23706672 negatvie: 0 pos_neg 23706672
+DYJetsToLL_M-10to50 total: 49267069 positive: 43104956 negatvie: 6162113 pos_neg 36942843
+DYJetsToLL_M-50-madgraphMLM total: 82448537 positive: 82448537 negatvie: 0 pos_neg 82448537
+DYJetsToLL_M-50 total: 51942796 positive: 43444736 negatvie: 8498060 pos_neg 34946676
+ST_s-channel_4f_leptonDecays total: 5471000 positive: 4516933 negatvie: 954067 pos_neg 3562866
+ST_t-channel_antitop_4f_InclusiveDecays total: 30609000 positive: 29711798 negatvie: 897202 pos_neg 28814596
+ST_t-channel_top_4f_InclusiveDecays total: 63073000 positive: 61086111 negatvie: 1986889 pos_neg 59099222
+ST_tW_antitop_5f_DS_NoFullyHadronicDecays total: 1488008 positive: 1480148 negatvie: 7860 pos_neg 1472288
+ST_tW_antitop_5f_NoFullyHadronicDecays total: 3654510 positive: 3654420 negatvie: 90 pos_neg 3654330
+ST_tW_top_5f_DS_NoFullyHadronicDecays total: 1502565 positive: 1494053 negatvie: 8512 pos_neg 1485541
+ST_tW_top_5f_NoFullyHadronicDecays total: 3368375 positive: 3368306 negatvie: 69 pos_neg 3368237
+TTJets_Inclusive total: 90609841 positive: 61745948 negatvie: 28863893 pos_neg 32882055
+TTWJetsToLNu total: 3322643 positive: 2561733 negatvie: 760910 pos_neg 1800823
+TTWJetsToQQ total: 308983 positive: 238967 negatvie: 70016 pos_neg 168951
+TTZToLLNuNu_M-10 total: 6057000 positive: 4519696 negatvie: 1537304 pos_neg 2982392
+TTZToQQ total: 5401000 positive: 4041755 negatvie: 1359245 pos_neg 2682510
+TTbar_AllHadronic total: 109380000 positive: 108937391 negatvie: 442609 pos_neg 108494782
+NoFile!!! : NtupleCheck_v1/UL2016PostVFP/TTbar_SemiLeptonic/TTbar_SemiLeptonic_15.txt
+NoFile!!! : NtupleCheck_v1/UL2016PostVFP/TTbar_SemiLeptonic/TTbar_SemiLeptonic_18.txt
+TTbar_SemiLeptonic total: 106619000 positive: 106188903 negatvie: 430097 pos_neg 105758806
+TTbar_Signal total: 43630000 positive: 43453623 negatvie: 176377 pos_neg 43277246
+WJetsToLNu-madgraphMLM total: 82754918 positive: 82754918 negatvie: 0 pos_neg 82754918
+WJetsToLNu total: 28268221 positive: 23832700 negatvie: 4435521 pos_neg 19397179
+WW total: 15821000 positive: 15821000 negatvie: 0 pos_neg 15821000
+WZ total: 7584000 positive: 7584000 negatvie: 0 pos_neg 7584000
+ZZ total: 1151000 positive: 1151000 negatvie: 0 pos_neg 1151000
+
+
+
+

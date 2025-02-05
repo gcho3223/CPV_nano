@@ -1,0 +1,85 @@
+
+#include "../interface/Analysis.h"
+#include <fstream>
+#include <iostream>
+#include <sstream>
+
+// 생성자: 체인 설정 및 브랜치 리스트 로드
+Analysis::Analysis(TChain *inputChain, const std::string &branchListFile) : chain(inputChain) {
+    if (!chain) {
+        std::cerr << "Error: Invalid TChain pointer!" << std::endl;
+        return;
+    }
+
+    // 텍스트 파일에서 브랜치 리스트 로드
+    LoadBranchList(branchListFile);
+
+    // 브랜치 설정 함수 호출
+    SetBranchAddresses();
+}
+
+// 텍스트 파일에서 브랜치 리스트 로드 함수
+void Analysis::LoadBranchList(const std::string &branchListFile) {
+    std::ifstream infile(branchListFile);
+    if (!infile) {
+        std::cerr << "Error: Could not open branch list file " << branchListFile << std::endl;
+        return;
+    }
+
+    std::string line;
+    while (std::getline(infile, line)) {
+        std::istringstream iss(line);
+        std::string branchName, objectType;
+        
+        // 쉼표로 분리하여 브랜치 이름과 오브젝트 타입 가져오기
+        if (std::getline(iss, branchName, ',') && std::getline(iss, objectType)) {
+            branchName.erase(branchName.find_last_not_of(" \t\n\r") + 1); // 공백 제거
+            objectType.erase(0, objectType.find_first_not_of(" \t\n\r")); // 공백 제거
+
+            // 오브젝트 타입에 따라 map에 추가
+            if (objectType == "trigger") {
+                boolBranches[branchName] = false;  // Trigger는 Bool_t 타입
+            } else if (objectType == "muon" || objectType == "jet" || objectType == "electron") {
+                floatBranches[branchName] = 0.0;   // 나머지 타입은 Float_t 타입으로 처리
+            } else {
+                std::cerr << "Error: Unsupported object type " << objectType << std::endl;
+            }
+        } else {
+            std::cerr << "Error: Invalid branch format in list" << std::endl;
+        }
+    }
+}
+
+// 브랜치 설정 함수
+void Analysis::SetBranchAddresses() {
+    for (auto &branch : boolBranches) {
+        chain->SetBranchAddress(branch.first.c_str(), &branch.second);
+    }
+    for (auto &branch : floatBranches) {
+        chain->SetBranchAddress(branch.first.c_str(), &branch.second);
+    }
+}
+
+// 이벤트 루프
+void Analysis::Loop() {
+    if (!chain) {
+        std::cerr << "Error: TChain is null!" << std::endl;
+        return;
+    }
+
+    Long64_t nEntries = chain->GetEntries();
+    for (Long64_t i = 0; i < nEntries; ++i) {
+        chain->GetEntry(i);
+
+        // 예제 분석 코드
+        if (boolBranches["HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ"]) {
+            std::cout << "Event " << i << ": HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ Trigger passed!" << std::endl;
+        }
+
+        if (boolBranches["HLT_IsoMu24"]) {
+            std::cout << "Event " << i << ": HLT_IsoMu24 Trigger passed!" << std::endl;
+        }
+
+        std::cout << "Muon pt: " << floatBranches["Muon_pt"] << std::endl;
+    }
+}
