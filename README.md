@@ -2,6 +2,22 @@
 
 This repository contains code for analyzing CMS NanoAOD data using the SSB framework. The analysis processes event data and extracts relevant physics observables.
 
+## Installation and Setup
+
+### Cloning the Repository
+To get started, clone the repository from GitHub and check out the required branch:
+```sh
+git clone --branch Run2_ULSummer20_v1 https://github.com/physicist87/SSBNanoAODANCode.git
+cd SSBNanoAODANCode
+```
+
+### Compilation Instructions
+To compile the analysis program, use the provided `Makefile`:
+```sh
+make -f Makefile
+```
+This will generate the executable **`ssb_analysis`**.
+
 ## Repository Structure and Code Summary
 
 ### **Main Components**
@@ -16,17 +32,9 @@ This repository contains code for analyzing CMS NanoAOD data using the SSB frame
 - **`xsecAndsample/`**: Holds cross-section and sample information for different datasets.
 - **`branchlist/`**: Contains lists of branches that are used in the analysis, ensuring compatibility with different versions of NanoAOD.
 
-## Compilation Instructions
-To compile the analysis program, use the provided `Makefile`:
-```sh
-make -f Makefile
-```
-This will generate the executable **`ssb_analysis`**.
-
 ## Running the Analysis
 ### Input Files
-Input file lists are stored in the `input/` directory. For example:
-- `input/UL2016PreVFP/TTbar_Signal_1.list`
+Input file lists are stored in the `input/` directory. Example:
 - `input/UL2016PreVFP/TTbar_Signal_1.list`
 
 ### Execution Format
@@ -41,7 +49,7 @@ Where:
   - `MuMu` → Dimuon channel
   - `ElEl` → Dielectron channel
   - `MuEl` → Muon-electron channel
-- **`input_list`**: The dataset file (e.g., `TTbar_Signal_1.list`).
+- **`input_list`**: The dataset file (e.g., `input/UL2016PreVFP/TTbar_Signal_1.list`).
 
 ### Example Execution Commands
 For a dimuon analysis in UL2016 PreVFP:
@@ -50,11 +58,21 @@ For a dimuon analysis in UL2016 PreVFP:
 ```
 For a dielectron analysis in UL2017:
 ```sh
-./ssb_analysis UL2017 StudyX ElEl input/TTJets_Signal_1.list
+./ssb_analysis UL2017 StudyX ElEl input/UL2016PreVFP/TTbar_Signal_1.list
 ```
 For a muon-electron analysis in UL2018:
 ```sh
-./ssb_analysis UL2018 AnalysisA MuEl input/UL2018_TTbar_Signal_1.list
+./ssb_analysis UL2018 AnalysisA MuEl input/UL2016PreVFP/TTbar_Signal_1.list
+```
+
+### Running a Check
+To validate the setup and check if the program is correctly configured, use:
+```sh
+bash run_ssb_check.sh
+```
+Alternatively, execute it directly:
+```sh
+./run_ssb_check.sh
 ```
 
 ### Checking the Output
@@ -90,14 +108,6 @@ Muon_mass, muon, Float_t, vector
 ```
 This structure ensures that only the necessary branches are accessed, optimizing performance and reducing memory usage.
 
-## Utility Scripts
-### Running a Check
-To validate the setup and check if the program is correctly configured, use:
-```sh
-bash run_ssb_check.sh
-```
-This script ensures that required files are present and the environment is correctly set up.
-
 ## Notes
 - Ensure that ROOT is properly installed and configured before running the analysis.
 - Modify `Makefile` if necessary to match your system's compiler settings.
@@ -108,5 +118,4 @@ For questions or contributions, please open an issue or contact the maintainers.
 
 ---
 This README provides essential instructions for setting up and running the SSB NanoAOD analysis. If you need additional details, feel free to modify and expand it!
-
 
