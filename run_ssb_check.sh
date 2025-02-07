@@ -1,5 +1,8 @@
 #!/bin/bash
 
+#############################
+## run arguments settings  ##
+#############################
 runPeriod="UL2016PreVFP"
 StudyName="Testv1"
 Channels="MuMu"
@@ -27,9 +30,6 @@ config="ULSummer20/${runPeriod}/${confch}"
 for i in "${inputlists[@]}"
 do
    mkdir -p output/${StudyName}/${runPeriod}/${Channels}
-   #./ssb_analysis ${runPeriod}/${i}.list ${StudyName}/${runPeriod}/${Channels}/${i}.root analysis_config.config
-   #echo ./ssb_analysis "${runPeriod}/${i}.list" "${StudyName}/${runPeriod}/${Channels}/${i}.root" "$config" "None" ${runPeriod}
-   #./ssb_analysis "${i}.list" "${StudyName}/${runPeriod}/${Channels}/${i}.root" "$config" "None" ${runPeriod}
    echo ./ssb_analysis "${i}.list" "${StudyName}/${runPeriod}/${Channels}/${i}.root" "ULSummer20/UL2016PreVFP/dimuon.config" "None" ${runPeriod}
    ./ssb_analysis "${runPeriod}/${i}.list" "${StudyName}/${runPeriod}/${Channels}/${i}.root" "ULSummer20/UL2016PreVFP/dimuon.config" "None" ${runPeriod} 10
 done

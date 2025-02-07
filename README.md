@@ -12,9 +12,14 @@ cd SSBNanoAODANCode
 ```
 
 ### Compilation Instructions
+Before compiling, need to activate ROOT
+I use ROOT v6.14.04
+```sh
+source /cvmfs/sft.cern.ch/lcg/app/releases/ROOT/6.14.04/x86_64-centos7-gcc48-opt/root/bin/thisroot.sh
+```
 To compile the analysis program, use the provided `Makefile`:
 ```sh
-make -f Makefile
+make -f Makefile_ssb
 ```
 This will generate the executable **`ssb_analysis`**.
 
