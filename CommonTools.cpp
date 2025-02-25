@@ -1,5 +1,5 @@
 #include "CommonTools.hpp"
-#include<stdlib.h>
+#include <stdlib.h>
 
 void FillHisto(TH1 *hist, Double_t val, Double_t weight)
 {

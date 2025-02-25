@@ -1,0 +1,6 @@
+.vscode/
+/output/*
+/output/*.root
+*.o
+*.txt
+/plots/Job_Version/*

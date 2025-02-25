@@ -22,7 +22,7 @@
 #include <TTree.h>
 
 #include "./interface/Analysis.h"
-
+#include "./interface/Config.h"
 using namespace std;
 
 TROOT root ("Plots", "Program for CMS Analysis");
@@ -30,126 +30,111 @@ TROOT root ("Plots", "Program for CMS Analysis");
 //argc: # of arguments, argv:array for arguments
 int main(int argc, char **argv)
 {
-    printf("The number of options is: %i\n",argc-1);
+   printf("//////////////////////////////////////////\n");
+   printf("///            main_ssb.cpp            ///\n");
+   printf("//////////////////////////////////////////\n");
+   printf("The number of options is: %i\n",argc-1);
+   if(argc<2)
+   {
+      printf("At least, you have to set 1, 2\n");
+      printf("1. Input filelist\n");
+      printf("2. Output file\n");
+      printf("3. Config file name\n");
+      printf("4. SE directory output name\n");
+      printf("5. RunPeriod\n");
+      printf("6. Max Number Events\n");
     
-    if(argc<2)
-    {
-       printf("At least, you have to set 1, 2\n");
-       printf("1. Input filelist\n");
-       printf("2. Output file\n");
-       printf("3. Config file name\n");
-       printf("4. SE directory output name\n");
-       printf("5. RunPeriod\n");
-       printf("6. Max Number Events\n");
+      //printf("4. Muon Candidate Eta Cut On or Off\n");
+      //printf("5. Muon Candidate Eta Cut \n");
+      //printf("6. Charge Opposite Sign On or Off\n");
+      //printf("7. Dimuon Mass Cut On or Off\n");
+      //printf("8. Dimuon Mass Cut\n");
+      return 1;
+   }
     
-/*       printf("4. Muon Candidate Eta Cut On or Off\n");
-       printf("5. Muon Candidate Eta Cut \n");
-       printf("6. Charge Opposite Sign On or Off\n");
-       printf("7. Dimuon Mass Cut On or Off\n");
-       printf("8. Dimuon Mass Cut\n");*/
-       return 1;
-    }
+   for (int iopt=0; iopt<argc; iopt++) {printf("Option %i = %s\n",iopt,argv[iopt]);}
     
-    for (int iopt=0; iopt<argc; iopt++)
-    {
-       printf("Option %i = %s\n",iopt,argv[iopt]);
-    }
+   ///read input options
     
-    ///read input options
+   //cout << "argc: " << argc << endl;
+   char *flist = argv[1];
+   printf("Input filelist = %s\n", flist);
+   char *outname = argv[2];
+   printf("Output file name = %s\n", outname);
+   char *confname = argv[3];
+   printf("Config file name = %s\n", confname);
+   char *sedirname = argv[4];
+   printf("SE Dir name = %s\n", sedirname);
+   char *runPeriod = argv[5];
+   printf("Run period = %s\n", runPeriod);
+   //int *runPeriod = argv[5];
+   int maxEvt = std::stoi(argv[6]);
+   printf("Max Number of Events = %d\n", maxEvt);
     
-    //cout << "argc: " << argc << endl;
+   //merge files
+   FILE *filelist;
+   char filename[1000];
+   string filelistDir, filelistName, filelistPath;
     
-    char *flist = argv[1];
-    printf("Input filelist = %s\n", flist);
+   filelistDir = "./input/";
     
-    char *outname = argv[2];
-    printf("Output file name = %s\n", outname);
-    
-    char *confname = argv[3];
-    printf("Config file name = %s\n", confname);
-    
-    char *sedirname = argv[4];
-    printf("SE Dir name = %s\n", sedirname);
-    
-    char *runPeriod = argv[5];
-    printf("Run period = %s\n", runPeriod);
-
-    //int *runPeriod = argv[5];
-    int maxEvt = std::stoi(argv[6]);
-
-    printf("Run period = %d\n", maxEvt);
-    
-    //merge files
-    FILE *filelist;
-    char filename[1000];
-    string filelistDir, filelistName, filelistPath;
-    
-    filelistDir = "./input/";
-    
-    cout << endl;
-    filelistName = argv[1];
-    filelistPath = filelistDir + filelistName;
-    filelist = fopen(filelistPath.c_str(),"r");
+   cout << endl;
+   filelistName = argv[1];
+   filelistPath = filelistDir + filelistName;
+   filelist = fopen(filelistPath.c_str(),"r");
    
-    std::vector<double> genentries_pertree;
+   std::vector<double> genentries_pertree;
     
-    genentries_pertree.clear();
+   genentries_pertree.clear();
     
-    std::vector<double> entries_pertree;
+   std::vector<double> entries_pertree;
     
-    entries_pertree.clear();
+   entries_pertree.clear();
     
-    while(filelist==NULL)
-    {
-       cout << "File not found, please try again." << endl;
-       cout << "Filelist you want to use: " << filelistDir;
-       cin >> filelistName;      
-       filelistPath = filelistDir + filelistName;
-       filelist=fopen(filelistPath.c_str(),"r");
-    }
+   while(filelist==NULL)
+   {
+      cout << "Input filelist not found, please try again." << endl;
+      cout << "Filelist you want to use: " << filelistDir;
+      cin >> filelistName;      
+      filelistPath = filelistDir + filelistName;
+      filelist=fopen(filelistPath.c_str(),"r");
+   }
     
-//    TChain *chgen = new TChain("demo/SSBGenTree");
-    //TChain *ch    = new TChain("ssbanalyzer/NanoAODTree"   );
-    //TChain *ch    = new TChain("ssbanalyzer/SSBMiniTree"   );
-    TChain *ch = new TChain("Events");
+   //TChain *chgen = new TChain("demo/SSBGenTree");
+   //TChain *ch    = new TChain("ssbanalyzer/NanoAODTree"   );
+   //TChain *ch    = new TChain("ssbanalyzer/SSBMiniTree"   );
+   TChain *ch = new TChain("Events");
     
-    cout << endl;
-    cout << "start merging file(s)" << endl;
+   cout << "start merging file(s)" << endl;
     
-    while (fscanf(filelist, "%s", filename) != EOF)
-    {
-       cout << "adding: " << filename << endl;
-       ch->Add(filename, 0);
-       entries_pertree.push_back(ch->GetEntries());
-    }
-    cout << "Total number of events after merging root files: " << ch->GetEntries() << endl;
+   while (fscanf(filelist, "%s", filename) != EOF)
+   {
+      cout << "adding: " << filename << endl;
+      ch->Add(filename, 0);
+      entries_pertree.push_back(ch->GetEntries());
+   }
+   cout << "Total number of events after merging root files: " << ch->GetEntries() << endl;
 
-    // 
-    Analysis analysis(ch, filelistName, sedirname, outname, "./branchlist/branch_list.txt", confname, maxEvt);
+   Analysis analysis(ch, filelistName, sedirname, outname, "./branchlist/branch_list.txt", confname, maxEvt);
+   Config::SetVariables();
+   // Execute Loop function //
+   analysis.Loop();
 
-    analysis.SetVariables();
-    // Execute Loop function //
-    analysis.Loop();
-
-/*
-   //NanoAODTree *nano = new NanoAODTree(ch, "test");
-   ssb_analysis *ssb = new ssb_analysis(ch, confname);
-   ssb->SetInputFileName(flist);
-   //ssb->SetNanoAODHeader();
-   //ssb->SetOutputFileName(outname);
-   ssb->SetOutputFileName(outname, sedirname);
-//   ssb->SetConfigFile(flist);
-   ssb->GetNtupleTotalEvent( ch->GetEntries() );
-   ssb->Start();
-   ssb->Loop( flist );
-   ssb->End();
+   ////NanoAODTree *nano = new NanoAODTree(ch, "test");
+   //ssb_analysis *ssb = new ssb_analysis(ch, confname);
+   //ssb->SetInputFileName(flist);
+   ////ssb->SetNanoAODHeader();
+   ////ssb->SetOutputFileName(outname);
+   //ssb->SetOutputFileName(outname, sedirname);
+   ////ssb->SetConfigFile(flist);
+   //ssb->GetNtupleTotalEvent( ch->GetEntries() );
+   //ssb->Start();
+   //ssb->Loop( flist );
+   //ssb->End();
       
-   delete ssb;
-   cout << "Delete ssb..." << endl << endl; 
-   delete ch;
-   cout << "End processing..." << endl << endl; 
-       
-*/
+   //delete ssb;
+   //cout << "Delete ssb..." << endl << endl; 
+   //delete ch;
+   //cout << "End processing..." << endl << endl; 
    return 0;
 }
-

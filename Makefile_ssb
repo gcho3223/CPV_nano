@@ -8,41 +8,57 @@ OPT             =
 ROOTLIBS        = $(shell root-config --libs)
 ROOTGLIBS       = $(shell root-config --glibs)
 
-
 LIBS            = $(ROOTLIBS)
 GLIBS           = $(ROOTGLIBS) -L/usr/X11R6/lib -lXext -lGenVector
-OBJS            = CommonTools.o  Analysis.o main_ssb.o TextReader.o  
-INPUTS	   	    =  ./interface/Analysis.h ./src/Analysis.cpp main_ssb.cpp ./TextReader/TextReader.hpp ./TextReader/TextReader.cpp
- 
-all: $(OBJS) 															
+
+OBJS            = Analysis.o Trigger.o Lepton.o Jet.o MCSaleFactor.o MET.o Config.o main_ssb.o TextReader.o CommonTools.o
+
+INPUTS          = ./interface/Analysis.h ./src/Analysis.cpp main_ssb.cpp ./TextReader/TextReader.hpp ./TextReader/TextReader.cpp
+
+all: $(OBJS)
 	$(CC) $(OPT) $(LDFLAGS) -o $(PROGRAM) -g $(OBJS) $(LIBS)
 
-main_ssb.o: main_ssb.cpp $(INPUTS) 
+main_ssb.o: main_ssb.cpp $(INPUTS)
 	$(CC) $(CXXFLAGS) -c main_ssb.cpp
-
-#ssb_analysis.o: ./interface/ssb_analysis.hpp ./src/ssb_analysis.cpp
-#	$(CC) $(CXXFLAGS) -c ./src/ssb_analysis.cpp
 
 Analysis.o: ./interface/Analysis.h ./src/Analysis.cpp
 	$(CC) $(CXXFLAGS) -c ./src/Analysis.cpp
 
-CommonTools.o: CommonTools.hpp CommonTools.cpp
-	$(CC) $(CXXFLAGS) -c CommonTools.cpp
+Config.o: ./interface/Config.h ./src/Config.cpp
+	$(CC) $(CXXFLAGS) -c ./src/Config.cpp
+
+Trigger.o: ./interface/Trigger.h ./src/Trigger.cpp
+	$(CC) $(CXXFLAGS) -c ./src/Trigger.cpp
+
+Lepton.o: ./interface/Lepton.h ./src/Lepton.cpp
+	$(CC) $(CXXFLAGS) -c ./src/Lepton.cpp
+
+Jet.o: ./interface/Jet.h ./src/Jet.cpp
+	$(CC) $(CXXFLAGS) -c ./src/Jet.cpp
+
+MCSaleFactor.o: ./interface/MCSaleFactor.h ./src/MCSaleFactor.cpp
+	$(CC) $(CXXFLAGS) -c ./src/MCSaleFactor.cpp
+
+MET.o: ./interface/MET.h ./src/MET.cpp
+	$(CC) $(CXXFLAGS) -c ./src/MET.cpp
 
 TextReader.o: ./TextReader/TextReader.hpp ./TextReader/TextReader.cpp
 	$(CC) $(CXXFLAGS) -c TextReader/TextReader.cpp
+
+CommonTools.o: CommonTools.hpp CommonTools.cpp
+	$(CC) $(CXXFLAGS) -c CommonTools.cpp
 
 clean:
 	-rm -f *~ $(OBJS) core core.*	
 	-rm -rf ti_files
 	-rm -f $(PROGRAM)
-	-rm -f *~;
+	-rm -f *~
 
-distclean:						
+distclean:
 	-rm -f *~ $(PROGRAM) $(OBJS)
 	-rm -rf ti_files
 
-run: $(PROGRAM) $(OBJS)	
+run: $(PROGRAM) $(OBJS)
 	make all
 	./$(PROGRAM) 1
 
