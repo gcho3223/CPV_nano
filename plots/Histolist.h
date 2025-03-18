@@ -8,7 +8,7 @@
 
 vector<TString> hist1D =
 {
-    "h_Num_PV_beforePreSel",
+    "h_Num_PV_beforePreSel", "h_Num_PV_afterMETFilter", "h_Num_PV_afterTrigger",
     "h_Num_PV_0",   "h_Num_PV_1",   "h_Num_PV_2",   "h_Num_PV_3",   "h_Num_PV_4",   //"h_Num_PV_5",   "h_Num_PV_6",   "h_Num_PV_7",   "h_Num_PV_8",   "h_Num_PV_9",
     
     "h_Lep1pt_0",   "h_Lep1pt_1",   "h_Lep1pt_2",   "h_Lep1pt_3",   "h_Lep1pt_4",   //"h_Lep1pt_5",   "h_Lep1pt_6",   "h_Lep1pt_7",   "h_Lep1pt_8",   "h_Lep1pt_9",
@@ -27,7 +27,6 @@ vector<TString> hist1D =
     "h_Jet2phi_0",  "h_Jet2phi_1",  "h_Jet2phi_2",  "h_Jet2phi_3",  "h_Jet2phi_4",  //"h_Jet2phi_5",  "h_Jet2phi_6",  "h_Jet2phi_7",  "h_Jet2phi_8",  "h_Jet2phi_9",
     "h_Num_Jets_0", "h_Num_Jets_1", "h_Num_Jets_2", "h_Num_Jets_3", "h_Num_Jets_4", //"h_Num_Jets_5", "h_Num_Jets_6", "h_Num_Jets_7", "h_Num_Jets_8", "h_Num_Jets_9",
     "h_Num_bJets_0","h_Num_bJets_1","h_Num_bJets_2","h_Num_bJets_3","h_Num_bJets_4",//"h_Num_bJets_5","h_Num_bJets_6","h_Num_bJets_7","h_Num_bJets_8","h_Num_bJets_9",
-    "h_Num_Jets_puid_0", "h_Num_Jets_puid_1", "h_Num_Jets_puid_2", "h_Num_Jets_puid_3", "h_Num_Jets_puid_4", //"h_Num_Jets_puid_5", "h_Num_Jets_puid_6", "h_Num_Jets_puid_7", "h_Num_Jets_puid_8", "h_Num_Jets_puid_9",
 
     "h_METpt_0",    "h_METpt_1",    "h_METpt_2",    "h_METpt_3",    "h_METpt_4",    //"h_METpt_5",    "h_METpt_6",    "h_METpt_7",    "h_METpt_8",    "h_METpt_9",
     "h_METphi_0",   "h_METphi_1",   "h_METphi_2",   "h_METphi_3",   "h_METphi_4",   //"h_METphi_5",    "h_METphi_6",  "h_METphi_7",   "h_METphi_8",    "h_METphi_9",
