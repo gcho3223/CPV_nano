@@ -14,8 +14,10 @@ void DrawOverflowBin(TH1D *his, double min, double max)
     }
     for (int i=0; i<his->GetNbinsX()-1; i++)
 	{
-        if (his->GetBinCenter(i+1) < min && his->GetBinCenter(i+2) > min) his->SetBinContent(i+2, contentUnder);
-        if (his->GetBinCenter(i+1) < max && his->GetBinCenter(i+2) > max) his->SetBinContent(i+1, contentOver);
+        if (his->GetBinCenter(i+1) < min && his->GetBinCenter(i+2) > min) 
+            his->AddBinContent(i+2, contentUnder);
+        if (his->GetBinCenter(i+1) < max && his->GetBinCenter(i+2) > max) 
+            his->AddBinContent(i+1, contentOver);
     }
     his->GetXaxis()->SetRangeUser(min, max);
 }

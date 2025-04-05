@@ -7,11 +7,12 @@ std::vector<std::string> Trigger::DLtrigName;
 std::vector<std::string> Trigger::SLtrigName;
 std::vector<std::string> Trigger::trigName;
 
+std::unordered_map<std::string, int> Trigger::triggerPassCount;
+std::vector<std::string> Trigger::passedTriggersThisEvent;
+
 bool Trigger::Trig()
 {
-    std::cout << "=============================================================" << std::endl;  
-    std::cout << "||                        Trigger                          ||" << std::endl;
-    std::cout << "=============================================================" << std::endl;
+    //std::cout << "||------------------------Trigger------------------------||" << std::endl;
     /// Variable for Trigger Function
     bool singleTrig_ = false;
     bool doubleTrig_ = false;
@@ -24,38 +25,45 @@ bool Trigger::Trig()
  
     if(!TString(Analysis::FileName_).Contains("Data")) // MC //
     { 
-        //trigpass = true; return trigpass;
+        // Debugging line
+        //std::cout << "FileName_ : " << Analysis::FileName_ << std::endl;
+        //for(int i = 0; i < seltrigName.size(); i++) {std::cout << "seltrigName["<< i << "] : " << seltrigName[i] << std::endl;}
+        ////trigpass = true; return trigpass; //original
+        
+        //ispassvetoTrig_ = false; //original
+        //seltrigName = trigName; //original
+        //trigpass = SelTrig(seltrigName); //original
+        
+        //---------------------------------------------------//
+        //if(trigpass == true) {std::cout << "trigpass is true, PASSED!!" << std::endl;}
+        //else {std::cout << "trigpass is false, FAILED!!" << std::endl;}
+        
         ispassvetoTrig_ = false; 
         seltrigName = trigName;
+        // print trigger list ///
+        //std::cout << "seltrigName : ";
+        //for(const auto &name:seltrigName) {std::cout << name << " ";}
+        //std::cout << std::endl;
         for(const auto &trigger : seltrigName)
         {
             bool skipTrigger = false;
             if(TString(Analysis::Decaymode).Contains("dimuon"))
             {
-                if(TString(Analysis::RunPeriod).Contains("2016H"))
-                {
-                    // if RunPeriod is 2016H, skip these triggers
-                    if(TString(trigger).Contains("HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL") ||
-                       TString(trigger).Contains("HLT_Mu17_TrkIsoVVL_TkMu8_TrackIdVVL"))
-                    {skipTrigger = true;}
-                }
-                else
+                if(!TString(Analysis::RunPeriod).Contains("2016H")) // these trigger are only applied to Data 2016H dimuon channel!
                 {
                     if(TString(trigger).Contains("HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ") ||
                        TString(trigger).Contains("HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ"))
-                    {skipTrigger = true;}
+                    {
+                        skipTrigger = true;
+                        //std::cout << "skipTrigger: " << trigger << std::endl;
+                    }
                 }
+                else {skipTrigger = false;}
             }
             if(!skipTrigger) {filteredTrig.push_back(trigger);}
         }
         trigpass = SelTrig(filteredTrig);
-
-        // Debugging line
-        std::cout << "FileName_ : " << Analysis::FileName_ << std::endl;
-        std::cout << "seltrigName : ";
-        for(const auto &name:seltrigName) {std::cout << name << " ";}
-        std::cout << std::endl;
-        std::cout << "trigpass : " << trigpass << std::endl;
+        //std::cout << "trigpass : " << trigpass << std::endl;
     }
     else // Data //
     {
@@ -176,7 +184,18 @@ bool Trigger::SelTrig(std::vector<std::string> v_sel)
         trgName = v_sel[j];
         /// trgName cout in triggerList ///
         auto it = triggerList.find(trgName);
-        if(it != triggerList.end() && it->second) {if(**(it->second)) {ptrigindex++;}}
+        if(it != triggerList.end() && it->second)
+        {
+            if(**(it->second))
+            {
+                ptrigindex++;
+                triggerPassCount[trgName]++;
+                passedTriggersThisEvent.push_back(trgName);
+                //std::cout << "trgName : " << trgName << " is passed" << std::endl;
+            }
+            else {//std::cout << "trgName : " << trgName << " is failed" << std::endl;
+            }
+        }
         else {std::cerr << "Error: Trigger " << trgName << " not found in triggerList." << std::endl;}
     }
     if (ptrigindex > 0) {passtrig_ = true;}

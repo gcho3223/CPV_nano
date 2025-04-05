@@ -22,7 +22,7 @@
 
 class Analysis {
 public:
-    // Constructor and destructor
+    /// Constructor and destructor ///
     Analysis(TChain *chain, std::string inputName, std::string seDirName, std::string outputName, const std::string &branchListFile, const std::string &configFile, int NumEvt);
     ~Analysis();
     void InitBranches(const std::string &branchListFile);
@@ -56,28 +56,8 @@ public:
     static TLorentzVector Met;
     static TLorentzVector Jet1;
     static TLorentzVector Jet2;
-
-    // jets //
-    static std::vector<TLorentzVector> jets; 
-    // index vector for object
-    static std::vector<int> v_jet_idx;
-    static std::vector<std::shared_ptr<TLorentzVector>> v_jet_TL;
-    //static std::vector<int> v_jet_TL;
-    static std::vector<int> v_jet_Id;
-    static std::vector<int> v_jet_idx_puid;
-
-    // MET //
-    static TTreeReaderValue<Float_t>* met_pt;
-    static TTreeReaderValue<Float_t>* met_phi;
-
-    static int eleid_scbcut;
-    static float  bdisccut;
-    static double met_cut;
-
-    /// Event weights ...
-    static double mc_sf_;
-    static double evt_weight_;
-    static double evt_weight_beforemcsf_;
+    static TLorentzVector bJet1;
+    static TLorentzVector bJet2;
 
 private:
     TString SetInputFileName( std::string inname );
@@ -103,6 +83,7 @@ private:
 
     int NumEvt; //loop
     int num_pv; //loop
+    int maxEvt;
     // muons //
     TLorentzVector TMuon;
     TLorentzVector TElectron;
@@ -116,19 +97,6 @@ private:
     //LepIdType   v_elec_Id;
 
     double pi;
-
-    /// Event weights ...
-    double evt_weight_beforegenweight_;
-    double evt_weight_beforefactrenoweight_;
-    double evt_weight_beforedectabweight_;
-    double evt_weight_beforefragmentweight_;
-    double evt_weight_beforepdfweight_;
-    double evt_weight_beforePileup_;
-    double evt_weight_beforeL1PreFire_;
-    double evt_weight_beforeTrigger_;
-    double evt_weight_beforeLepsf_;
-    double evt_weight_beforeBtag_;
-    double lep_eff;
 
     //Kinetic Variables                                                                                                               
     int    n_elep_Id;
@@ -153,7 +121,23 @@ private:
     TH1D *h_Num_PV_beforePreSel;
     TH1D *h_Num_PV_afterMETFilter;
     TH1D *h_Num_PV_afterTrigger;
-    
+    TH1D *h_passedTriggers;
+    TH2D *h_triggerEvent;
+    // debug: selected muon information after object selection //
+    TH1D *h_AllSelMu_multiplisity_wW;
+    TH1D *h_AllSelMu_multiplisity_woW;
+    TH1D *h_AllSelMu_pt;
+    TH1D *h_AllSelMu_eta;
+    TH1D *h_AllSelMu_phi;
+    TH1D *h_AllSelMu_iso;
+    // debug: all selected electrons
+    TH1D *h_AllSelVetoEle_multiplisity_wW;
+    TH1D *h_AllSelVetoEle_multiplisity_woW;
+    TH1D *h_AllSelVetoEle_pt;
+    TH1D *h_AllSelVetoEle_eta;
+    TH1D *h_AllSelVetoEle_phi;
+    TH1D *h_AllSelVetoEle_iso;
+
     TH1D *h_Num_PV[10];
     
     TH1D *h_Lep1pt[10];
@@ -162,7 +146,7 @@ private:
     TH1D *h_Lep2eta[10];
     TH1D *h_Lep1phi[10];
     TH1D *h_Lep2phi[10];
-    TH1D *h_DiLepMass[10]; 
+    TH1D *h_DiLepMass[10];
 
     TH1D *h_Jet1pt[10];
     TH1D *h_Jet2pt[10];
@@ -170,6 +154,12 @@ private:
     TH1D *h_Jet2eta[10];
     TH1D *h_Jet1phi[10];
     TH1D *h_Jet2phi[10];
+    TH1D *h_bJet1pt[10];
+    TH1D *h_bJet2pt[10];
+    TH1D *h_bJet1eta[10];
+    TH1D *h_bJet2eta[10];
+    TH1D *h_bJet1phi[10];
+    TH1D *h_bJet2phi[10];
     TH1D *h_Num_Jets[10];
     TH1D *h_Num_Jets_puid[10];
     TH1D *h_Num_bJets[10];

@@ -4,3 +4,5 @@
 *.o
 *.txt
 /plots/Job_Version/*
+/Condor/Job_Version/*
+/Condor/Run_Summary/*

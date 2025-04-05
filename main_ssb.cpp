@@ -77,6 +77,8 @@ int main(int argc, char **argv)
    string filelistDir, filelistName, filelistPath;
     
    filelistDir = "./input/";
+   //filelistDir = "/u/user/gcho/TopPhysics/CPV/NanoAOD/CMSSW_13_3_0/src/SSBNanoAODANCode/input/";
+   
     
    cout << endl;
    filelistName = argv[1];
@@ -116,9 +118,12 @@ int main(int argc, char **argv)
    cout << "Total number of events after merging root files: " << ch->GetEntries() << endl;
 
    Analysis analysis(ch, filelistName, sedirname, outname, "./branchlist/branch_list.txt", confname, maxEvt);
+   //Analysis analysis(ch, filelistName, sedirname, outname, "./branchlist/UL2018branch_list.txt", confname, maxEvt);
    Config::SetVariables();
    // Execute Loop function //
    analysis.Loop();
+   //cout << "Trigger pass: " << analysis.trig_pass << endl;
+   //cout << "Trigger fail: " << analysis.trig_fail << endl;
 
    ////NanoAODTree *nano = new NanoAODTree(ch, "test");
    //ssb_analysis *ssb = new ssb_analysis(ch, confname);

@@ -39,6 +39,7 @@ void DrawKinematics(TH1D *hist, string sample, string version, string savepath)
 		//hist->Rebin(5);
 		hist->GetXaxis()->SetTitle("GeV");
 		DrawOverflowBin(hist, 0, 250);
+		//hist->GetXaxis()->SetRangeUser(0, 250);
 		savepath = Form("%s/pT",savepath.c_str());
 	}
 	/// eta ///
@@ -46,7 +47,7 @@ void DrawKinematics(TH1D *hist, string sample, string version, string savepath)
 	{
 		//hist->Rebin(2);
 		hist->GetXaxis()->SetTitle("#eta");
-		//DrawOverflowBin(hist, -2.5, 2.5);
+		DrawOverflowBin(hist, -2.5, 2.5);
 		savepath = Form("%s/eta",savepath.c_str());
 	}
 	/// phi ///
@@ -54,7 +55,7 @@ void DrawKinematics(TH1D *hist, string sample, string version, string savepath)
 	{
 		//hist->Rebin(4);
 		hist->GetXaxis()->SetTitle("#phi");
-		//DrawOverflowBin(hist, -3.14, 3.14);
+		DrawOverflowBin(hist, -3.14, 3.14);
 		savepath = Form("%s/phi",savepath.c_str());
 	}
 	/// invariant mass ///
@@ -62,12 +63,19 @@ void DrawKinematics(TH1D *hist, string sample, string version, string savepath)
 	{
 		//hist->Rebin(5);
 		hist->GetXaxis()->SetTitle("Invariant Mass (GeV)");
-		//DrawOverflowBin(hist, 0, 300);
+		//DrawOverflowBin(hist, 0, 1);
+	}
+	/// isolation ///
+	if(hname.Contains("iso"))
+	{
+		//hist->Rebin(5);
+		hist->GetXaxis()->SetTitle("Isolation");
+		//DrawOverflowBin(hist, 0, 1);
 	}
     /// number of jets ///
-	if(hname.Contains("Num_Jets") || hname.Contains("Num_bJets"))
+	if(hname.Contains("Num_Jets") || hname.Contains("Num_bJets") || hname.Contains("multiplicity"))
 	{
-		hist->GetXaxis()->SetTitle("# of Jets");
+		hist->GetXaxis()->SetTitle("Multiplicity");
         hist->GetXaxis()->SetRangeUser(0, 20);
 		savepath = Form("%s/Num_Jets",savepath.c_str());
 	}
@@ -112,6 +120,18 @@ void DrawKinematics(TH1D *hist, string sample, string version, string savepath)
 		//DrawOverflowBin(hist, -2, 2);
 		savepath = Form("%s/O3",savepath.c_str());
 	}
+
+	hist->SetStats(0);
+	leg = new TLegend(.55,.7,.93,.87);
+	leg->SetTextSize(0.023);
+	leg->SetBorderSize(0);
+	leg->SetFillColor(0);
+	leg->SetFillStyle(0);
+	leg->AddEntry(hist, Form("Entries: %0.f",hist->GetEntries()),"");
+	leg->AddEntry(hist, Form("Mean: %.4f",hist->GetMean()),"");
+	leg->AddEntry(hist, Form("Std Dev: %.4f",hist->GetRMS()),"");
+	leg->AddEntry(hist, Form("Integral: %.4f",hist->Integral()),"");
+	leg->Draw();
 
 	/// save canvas ///
 	gSystem->mkdir(Form("%s/",savepath.c_str()),kTRUE);

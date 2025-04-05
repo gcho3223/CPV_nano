@@ -12,19 +12,20 @@
 void Plotter_Kinematics(string version, string period, string channel)
 {
 	vector<string> sample = {
-        "TTbar_Signal_1"
+        "TTbar_Signal"
     };
-
-	string savepath = Form("./Job_Version/%s/%s/%s",version.c_str(),period.c_str(),channel.c_str()); // add sample name after channel
 
 	for(int isn=0; isn<sample.size(); isn++)
 	{
 		TString fin;
 		/// file read ///
-		fin = Form("../output/%s/%s/%s/%s_test.root",version.c_str(),period.c_str(),channel.c_str(),sample[isn].c_str());
+		//fin = Form("../output/%s/%s/%s/%s_test.root",version.c_str(),period.c_str(),channel.c_str(),sample[isn].c_str());
+		fin = Form("../output/Job_Version/%s/Dataset/%s/%s/%s/%s_All.root",version.c_str(),period.c_str(),channel.c_str(),sample[isn].c_str(),sample[isn].c_str());
 		TFile *f = new TFile(fin,"READ");
 		if(f==NULL){cout << "File is not found........." << endl;}
 		else {cout << fin.Data() << endl;}
+		string savepath = Form("./Job_Version/%s/Dataset/%s/%s/%s",version.c_str(),period.c_str(),channel.c_str(),sample[isn].c_str()); // add sample name after channel
+		gSystem->mkdir(Form("%s",savepath.c_str()),kTRUE);
 		/// draw histogram!! ///
 		for(int ih1=0; ih1<hist1D.size(); ih1++)
 		{

@@ -1,26 +1,34 @@
 #include "../interface/MCSaleFactor.h"
+#include "../interface/Config.h"
+//-------------------------------Initialize variables-------------------------------//
+double MCSaleFactor::evt_weight_;
+double MCSaleFactor::evt_weight;
+double MCSaleFactor::evt_weight_gW_;
+double MCSaleFactor::evt_weight_beforemcsf_;
+double MCSaleFactor::mc_sf_;
+double MCSaleFactor::evt_weight_beforegenweight_;
+double MCSaleFactor::genweight;
+TTreeReaderValue<Float_t>* MCSaleFactor::Gen_weight;
 
 void MCSaleFactor::MCSFApply()
 {
-    std::cout << "=============================================================" << std::endl;
-    std::cout << "||                MC Scale Factor Apply                    ||" << std::endl;
-    std::cout << "=============================================================" << std::endl;
+    //std::cout << "||------------------------MC Scale Factor Apply------------------------||" << std::endl;
     MCSF();
-    Analysis::evt_weight_beforemcsf_ =1; // Initailize evt_weight_beforemcsf_ //
-    Analysis::evt_weight_beforemcsf_ = Analysis::evt_weight_; // keep event weight //
-     
+    evt_weight_beforemcsf_ =1; // Initailize evt_weight_beforemcsf_ //
+    evt_weight_beforemcsf_ = evt_weight_; // keep event weight //
+    
     if ( !TString(Analysis::FileName_).Contains( "Data") )
     {
-        Analysis::evt_weight_ = Analysis::evt_weight_ * Analysis::mc_sf_;
-        std::cout <<  "|| evt_weight_ : "<< Analysis::evt_weight_ << ", mc_sf_ : "  << Analysis::mc_sf_  << std::endl;
+        evt_weight_ = evt_weight_ * mc_sf_;
+        //std::cout <<  "|| MCSFApply evt_weight_ : "<< evt_weight_ << ", mc_sf_ : "  << mc_sf_  << std::endl;
     } // apply MC scale factor // 
-    else {Analysis::evt_weight_ = 1;}
-    std::cout << "|| MC SF(event weight) for Data: " << Analysis::evt_weight_<< std::endl;
+    else {evt_weight_ = 1;}
+    //std::cout << "|| MC SF(event weight) for Data: " << evt_weight_<< std::endl;
 } // end of MCSFApply //
 
 void MCSaleFactor::MCSF()
 {
-    if (Analysis::FileName_.Contains("Data")||Analysis::FileName_.Contains("Single")||Analysis::FileName_.Contains("EG")){ Analysis::mc_sf_ = 1.; return; }
+    if (Analysis::FileName_.Contains("Data")||Analysis::FileName_.Contains("Single")||Analysis::FileName_.Contains("EG")){ mc_sf_ = 1.; return; }
     /// Open Xsec Tables ///
     FILE *xsecs_;
     char sampleName[1000];
@@ -44,7 +52,7 @@ void MCSaleFactor::MCSF()
 
     if (xsecs_!=NULL) 
     {
-        std::cout << "||-------------------Load Xsection Table-------------------||" << std::endl;
+        std::cout << "||------------------------Load Xsection Table------------------------||" << std::endl;
         //cout << "Load Xsection Table!" << std::endl;
         while (fscanf(xsecs_, "%s %d %d %d %d %lf %lf\n", sampleName, &totalevt_, &positive_, &negative_, &posi_nega_, &xsec_, &br_ ) != EOF)
         {
@@ -72,13 +80,40 @@ void MCSaleFactor::MCSF()
     if (it !=  m_sam_xsec.end())
     {
         std::cout << "|| Key " << Analysis::FileName_.Data() << " found in the std::map."<< std::endl;
-        Analysis::mc_sf_ = (m_sam_xsec[Analysis::FileName_.Data()]*m_sam_br[Analysis::FileName_.Data()]*lumi)/m_sam_posi_nega[Analysis::FileName_.Data()];
-        std::cout << "|| mc_sf_ " << Analysis::mc_sf_ << std::endl;
+        mc_sf_ = (m_sam_xsec[Analysis::FileName_.Data()]*m_sam_br[Analysis::FileName_.Data()]*lumi)/m_sam_posi_nega[Analysis::FileName_.Data()];
+        std::cout << "|| mc_sf_ " << mc_sf_ << std::endl;
     }
     else
     {
-        Analysis::mc_sf_ =1.;
-        std::cout << "|| Key " << Analysis::FileName_.Data() << " not found in the std::map. mc sf is 1" << Analysis::mc_sf_ << std::endl;
+        mc_sf_ =1.;
+        std::cout << "|| Key " << Analysis::FileName_.Data() << " not found in the std::map. mc sf is 1" << mc_sf_ << std::endl;
     }
     return;
 } // end of MCSF //
+
+void MCSaleFactor::GenWeight()
+{
+    genweight = 1.0;
+    evt_weight_beforemcsf_ = 1;
+    evt_weight_beforemcsf_ = evt_weight_;
+    //evt_weight_gW_ = evt_weight_;
+    if(!TString(Analysis::FileName_).Contains("Data")) // MC sample //
+    {
+        if(*Gen_weight->Get() > 0.0) {genweight = 1;}
+        else {genweight = -1;}
+        evt_weight = evt_weight * genweight;
+        //std::cout << "|| p2 Gen_weight : " << *Gen_weight->Get() << ", genweight: " << genweight << ", evt_weight_: " << evt_weight_ << ", evt_weight: " << evt_weight << std::endl;
+    }
+    else {evt_weight_ = 1;} // Data //
+}
+
+//void MCSaleFactor::PileupWeight()
+//{
+//    Config::puweight = 1.0;
+//    Config::evt_weight_beforePileup_ = 1;
+//    Config::evt_weight_beforePileup_ = Config::evt_weight_;
+//    if(!TString(Config::FileName_).Contains("Data")) // MC sample //
+//    {if(TString(Config::PileUpSys).Contains("central")) {Config::puweight = Pileup_nPU;}}
+//    Config::evt_weight_ = Config::evt_weight_ * Config::puweight;
+//    std::cout << "|| Pileup_nPU : " << Pileup_nPU << ", puweight : " << Config::puweight << ", evt_weight_ : " << Config::evt_weight_ << std::endl;
+//}

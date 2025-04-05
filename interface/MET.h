@@ -12,6 +12,9 @@ public:
     static bool METFilterAPP();
     static bool METcut(TLorentzVector* met);
 
+    static TTreeReaderValue<Float_t>* met_pt;
+    static TTreeReaderValue<Float_t>* met_phi;
+    static double met_cut;
     static bool metcut;
 };
 
